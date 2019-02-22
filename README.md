@@ -59,7 +59,7 @@ awk -F "," '{if($1=="United States" && $7=="2012" && $4=="Camping Equipment"){A[
 awk -F "," '{if($1=="United States" && $7=="2012" && $4=="Outdoor Protection"){A[$5]=A[$5]+$10}} END{for(a in A){print A[a],",",a}}' WA_Sales_Products_2012-14.csv | sort -k 1 -n -r | awk -F "," 'NR==1 {print "Outdoor Protection : ",$2}'
   ```
   
-  ### Soal No.3 : 
+  ### Soal No.3
   
   Pada soal no 3 disuruh untuk membuat suatu password generator. Terdapat beberapa aturan dalam penyimpanan password tersebut, yaitu:
   
@@ -73,3 +73,31 @@ awk -F "," '{if($1=="United States" && $7=="2012" && $4=="Outdoor Protection"){A
   
   ##### Penyelesaian : 
   
+
+  ### Soal No.4
+  
+  Pada soal no 4, kita dihasurkan membuat suatu backup file syslog setiap jam dengan format nama "jam:menit tanggal-bulan-tahun". Dan file tersebut dienkripsi dengan mengubah huruf b dengan menambahkan urutan huruf ben sesuai jam sekarang.
+  
+  ##### Penyelesaian : 
+  
+  Untuk menyelesaikan soal ini kami terlebih dahulu menyimpan informasii waktu saat ini. Setelah itu mengekstrak nilai jam sebagai variable penjumlah nantinya. Berikutnya kami menambah ascii huruf b dengan nilai jam sekarang. Seletah itu untuk mengubah huruf b pada syslog, kami menggunakan awk dengan "gsub("b",val)" dan menyimpan hasilnya kedalam suatu file log.
+  
+  ##### Source Code : 
+  
+  ```
+  file=`date +"%R_%d-%m-%Y.log"`
+#echo $file
+jam=`date +"%H" | cut -c 2`
+jam=$((jam+98))
+#echo $jam
+
+if [ $jam -gt 122 ]
+then
+	jam=$((jam-26))
+fi
+
+#jam=71
+char=`echo "$jam" | awk '{printf("%c",$0)}'`
+#echo $char
+ps aux | awk -v val=$char '{ gsub("b",val)} {print}' > $file
+  ```
