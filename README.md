@@ -22,6 +22,10 @@
   done
   ```
   
+  ```
+  14 14 14 2 5 /bin/bash ...
+  ```
+  
   ##### Penjelasan : 
   File nature.zip diunzip, setelah itu setiap file yang terdapat pada folder nature akan didecode dan diganti namanya dengan format "new_*".
   
@@ -108,7 +112,7 @@ done
   
   ##### Penyelesaian : 
   
-  Untuk menyelesaikan soal ini kami terlebih dahulu menyimpan informasii waktu saat ini. Setelah itu mengekstrak nilai jam sebagai variable penjumlah nantinya. Berikutnya kami menambah ascii huruf b dengan nilai jam sekarang. Seletah itu untuk mengubah huruf b pada syslog, kami menggunakan awk dengan "gsub("b",val)" dan menyimpan hasilnya kedalam suatu file log.
+  Untuk menyelesaikan soal ini kami terlebih dahulu menyimpan informasii waktu saat ini. Setelah itu mengekstrak nilai jam sebagai variable penjumlah nantinya. Berikutnya kami menambah ascii huruf b dengan nilai jam sekarang. Seletah itu untuk mengubah huruf b pada syslog, kami menggunakan awk dengan "gsub("b",val)" dan menyimpan hasilnya kedalam suatu file log. Script ini juga dijalankan setiap jam menggunakan crontab.
   
   ##### Source Code : 
   
@@ -129,3 +133,32 @@ char=`echo "$jam" | awk '{printf("%c",$0)}'`
 #echo $char
 ps aux | awk -v val=$char '{ gsub("b",val)} {print}' > $file
   ```
+  ```
+  0 */1 * * * /bin/bash ...
+  ```
+
+### Soal No. 5
+
+Pada soal no 5 disuruh untuk menyimpan record dalam syslog yang memiliki kriteria sebagai berikut:
+
+a. Tidak mengandung string "sudo" tetapi mengdung "cron"
+
+b. jumlah field pada baris tersebut berjumlah kurang dari 13
+
+c. Menyimpan record ke dalam file logs yang berdirektory /home/[user]/modul1
+
+##### Penyelesaian : 
+
+Untuk menyelesaiakan soal ini, kami menggunakan awk yang memiliki kondisi tidak mengdung /sudo/, mengdung /cron/ dan NF (menghitung jumlah field) < 13.
+
+Soal ini juga mengharuskan menggunakan crontab dengan waktu per 6 menit antara menit ke 2-30.
+
+##### Source Code : 
+
+```
+awk '{if($0 !~ /sudo/ && $0 ~ /cron/ && NF < 13) print $0}' /var/log/syslog > /home/haritssm/modul1/soal5.log
+```
+
+```
+2-30/6 * * * * /bin/bash /home/haritssm/soal5.sh
+```
