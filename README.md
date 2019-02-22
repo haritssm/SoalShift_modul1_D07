@@ -73,6 +73,34 @@ awk -F "," '{if($1=="United States" && $7=="2012" && $4=="Outdoor Protection"){A
   
   ##### Penyelesaian : 
   
+  Untuk penyelesaian soal no 3, kami mengenerate password acak menggunakan 'tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c 12 ' dan dalam penyimpanan passwordnya kami mencek apakah terdapat file password$counter.txt, dimana $counter akan memberi tahu file keberapa, dan jika ada maka isi dari file tersebut dicek apakah password yang telah dibuat sama dengan yang ada dalam file. Hal ini dilakukan terus hingga tidak terdapat file dengan counter pada saat tersebut.
+  
+  ##### Source Code :
+  
+  ```
+  pass=`tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c 12`
+#pass="PassAda"
+echo $pass
+
+counter=1
+
+while true
+do
+	if [ ! -f `echo "password$counter.txt"` ]; then
+		echo "Ga Ada"
+		echo $pass > password$counter.txt
+		break
+	else
+		echo "Ada"
+		while read line; do
+			if [ $line = $pass ]; then
+				break
+			fi
+		done < password$counter.txt
+		counter=$((counter+1))
+	fi
+done
+  ```
 
   ### Soal No.4
   
