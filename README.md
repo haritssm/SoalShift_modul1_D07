@@ -156,7 +156,7 @@ Soal ini juga mengharuskan menggunakan crontab dengan waktu per 6 menit antara m
 ##### Source Code : 
 
 ```
-awk '{if($0 !~ /sudo/ && $0 ~ /cron/ && NF < 13) print $0}' /var/log/syslog > /home/haritssm/modul1/soal5.log
+awk '{if($0 !~ /sudo/ && $0 ~ /cron/||/CRON/ && NF < 13) print $0}' /var/log/syslog > /home/haritssm/modul1/soal5.log
 ```
 
 ```
