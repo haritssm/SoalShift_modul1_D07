@@ -105,6 +105,53 @@ do
 	fi
 done
   ```
+  
+  ### Revisi Soal 3
+  
+  Pada script sebelumnya, password yang dihasilkan ada yang tidak mengandung minimal 1 huruf kecil, 1 huruf besar dan 1 angka. Pada script revisi ini kami mampu untuk mendeteksi jika password yang dihasilkan telah memenuhi aturan tersebut. Cara yang kami gunakan adalah dengan mereturn apakah pada rentang 'a-z', 'A-Z' dan '0-9' terdapat pada password dengan cara grep -c -E "[a-z]+" dari password yang ada. Jika terdapat semua aturan tersebut makan akan mereturn nilai 1 dan jika tidak 0.
+  
+  ##### Source Code:
+  ```
+  #!/bin/bash
+
+while true
+do
+	pass=`tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c 12`
+	#pass="PassAda"
+	#echo $pass
+	low=`echo $pass | grep -c -E "[a-z]+"`
+	up=`echo $pass | grep -c -E "[A-Z]+"`
+	num=`echo $pass | grep -c -E "[0-9]+"`
+	#echo $low
+	#echo $up
+	#echo $num
+	if [[ $low>0 && $up>0 && $num>0 ]]; then
+		break
+	fi
+done
+
+#echo $pass
+counter=1
+
+while true
+do
+	if [ ! -f `echo "password$counter.txt"` ]; then
+		#echo "Ga Ada"
+		echo $pass > password$counter.txt
+		break
+	else
+		#echo "Ada"
+		while read line; do
+ 			if [ $line = $pass ]; then
+				break
+			fi
+		done < password$counter.txt
+		counter=$((counter+1))
+		#echo $pass >> password$counter.txt
+		#break
+	fi
+done
+  ```
 
   ### Soal No.4
   
